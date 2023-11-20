@@ -9,6 +9,11 @@ router.get('/', async (_, res) => {
   console.log('categories:', categories)
   res.json(categories)
 })
+router.get('/:categoyId', async (req, res) => {
+  const categoyId = req.params.categoyId
+  const categories = await Category.findById(categoyId)
+  res.json(categories)
+})
 
 router.post('/', async (req, res, next) => {
   const { name} = req.body
@@ -25,4 +30,20 @@ router.post('/', async (req, res, next) => {
   res.json(category)
 })
 
+router.delete('/:categoryId', async (req, res) =>{
+  const categoyId = req.params.categoryId
+  await Category.deleteOne({
+    _id: categoyId,
+  })
+  res.status(204).send(categoyId)
+})
+
+router.put('/:categoryId', async (req, res) =>{
+  const newName = req.body.name
+  const categoryId= req.params.categoryId
+  const updatedCategory = await Category.updateOne({_id: categoryId}, {name: newName})
+  console.log(updatedCategory, "updatedcategory")
+
+  res.json(updatedCategory)
+})
 export default router

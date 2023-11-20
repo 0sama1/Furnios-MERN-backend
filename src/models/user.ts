@@ -1,11 +1,14 @@
 import mongoose from 'mongoose'
-
+export type UserDocument = Document & {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+  role: string
+  avatar:string
+  isBlocked: boolean
+}
 const userSchema = new mongoose.Schema({
-
-  // name: {
-  //   type: String,
-  //   required: true,
-  // },
   firstName: {
     type: String,
     required: true,
