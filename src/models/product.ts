@@ -1,5 +1,15 @@
 import mongoose from 'mongoose'
 
+export type ProuctDocument = Document & {
+  name: string
+ image: string
+ description: string
+ categories: string
+ variants: string
+ sizes: string
+ price: number
+ quantity: number
+}
 const productSchema = new mongoose.Schema(
   {
     name: {

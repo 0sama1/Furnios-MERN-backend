@@ -77,3 +77,6 @@ Method: GET, Path: /api/products, Date: 20/11/2023, Time: 11:56:50
 Method: GET, Path: /api/products, Date: 20/11/2023, Time: 11:59:25
 Method: POST, Path: /api/products, Date: 20/11/2023, Time: 12:13:17
 Method: GET, Path: /api/products, Date: 20/11/2023, Time: 12:15:55
+Method: GET, Path: /api/products, Date: 20/11/2023, Time: 15:09:13
+Method: POST, Path: /api/products, Date: 20/11/2023, Time: 15:42:26
+Method: GET, Path: /api/categories, Date: 20/11/2023, Time: 16:09:29

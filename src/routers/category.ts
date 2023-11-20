@@ -11,7 +11,7 @@ router.get('/', async (_, res) => {
 })
 
 router.post('/', async (req, res, next) => {
-  const { name, image, description, categories, variants, sizes, price, quantity } = req.body
+  const { name} = req.body
 
   if (!name) {
     next(ApiError.badRequest('Name are requried'))
