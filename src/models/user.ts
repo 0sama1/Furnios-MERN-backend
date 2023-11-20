@@ -1,18 +1,24 @@
 import mongoose from 'mongoose'
 
-
 const userSchema = new mongoose.Schema({
+
+  // name: {
+  //   type: String,
+  //   required: true,
+  // },
   firstName: {
     type: String,
     required: true,
   },
-  lasttName: {
+  lastName: {
     type: String,
     required: true,
   },
   email: {
     type: String,
     required: true,
+    unique: true,
+
   },
   password: {
     type: String,
@@ -20,6 +26,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
+
     required: true,
   },
   avatar: {
@@ -28,6 +35,8 @@ const userSchema = new mongoose.Schema({
   isBlocked:{
     type: Boolean,
   },
+
+
   // relation between order and user should be many orders to one user
   // here's 1to1 just for the demo
   order: {
