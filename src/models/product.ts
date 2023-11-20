@@ -7,9 +7,26 @@ const productSchema = new mongoose.Schema(
       index: true,
       required: true,
     },
+    image:{
+      type: String,
+    },
     description: {
       type: String,
       required: true,
+    },
+    categories:{
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'category',
+      required: true,
+    },
+    variants:{
+        type: [{type: String}],
+    },
+    sizes:{
+      type: [{type: String}],
+    },
+    price:{
+      type: Number,
     },
     quantity: {
       type: Number,
