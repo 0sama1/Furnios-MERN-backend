@@ -32,18 +32,24 @@ router.post('/', async (req, res, next) => {
 
 router.delete('/:categoryId', async (req, res) =>{
   const categoyId = req.params.categoryId
-  await Category.deleteOne({
+  const category = await Category.deleteOne({
     _id: categoyId,
   })
-  res.status(204).send(categoyId)
+  res.json({
+    _id: categoyId,
+    name: req.body.name,
+    msg: "Category deleted"
+
+  })
 })
 
 router.put('/:categoryId', async (req, res) =>{
   const newName = req.body.name
   const categoryId= req.params.categoryId
   const updatedCategory = await Category.updateOne({_id: categoryId}, {name: newName})
-  console.log(updatedCategory, "updatedcategory")
-
-  res.json(updatedCategory)
+  res.json({
+    name: newName,
+    _id: categoryId
+  })
 })
 export default router
