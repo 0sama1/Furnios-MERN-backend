@@ -22,6 +22,7 @@ Method: POST, Path: /api/orders, Date: 9/19/2022, Time: 2:42:48 PM
 Method: POST, Path: /api/orders, Date: 9/19/2022, Time: 2:45:24 PM
 Method: GET, Path: /api/users, Date: 9/19/2022, Time: 2:48:09 PM
 Method: GET, Path: /api/users, Date: 9/19/2022, Time: 2:48:24 PM
+<<<<<<< Updated upstream
 Method: GET, Path: /, Date: 19/11/2023, Time: 15:17:51
 Method: GET, Path: /favicon.ico, Date: 19/11/2023, Time: 15:17:51
 Method: GET, Path: /, Date: 19/11/2023, Time: 15:18:01
@@ -113,3 +114,28 @@ Method: GET, Path: /api/categories/655b66128ea50c9dae1e3f15, Date: 20/11/2023, T
 Method: GET, Path: /api/categories/655b65fa8ea50c9dae1e3f12, Date: 20/11/2023, Time: 17:04:55
 Method: PUT, Path: /api/categories/655b65fa8ea50c9dae1e3f12, Date: 20/11/2023, Time: 17:05:03
 Method: PUT, Path: /api/categories/655b65fa8ea50c9dae1e3f12, Date: 20/11/2023, Time: 17:06:29
+=======
+Method: GET, Path: /, Date: 11/19/2023, Time: 1:57:43 PM
+>>>>>>> Stashed changes
+Method: GET, Path: /api/categories, Date: 11/22/2023, Time: 12:36:51 PM
+Method: GET, Path: /api/products, Date: 11/22/2023, Time: 12:37:27 PM
+Method: GET, Path: /api/products, Date: 11/22/2023, Time: 12:37:34 PM
+Method: GET, Path: /api/products, Date: 11/22/2023, Time: 12:41:32 PM
+Method: GET, Path: /api/products, Date: 11/22/2023, Time: 12:43:13 PM
+Method: GET, Path: /api/products, Date: 11/22/2023, Time: 12:43:14 PM
+Method: GET, Path: /api/products, Date: 11/22/2023, Time: 1:03:28 PM
+Method: GET, Path: /api/products, Date: 11/22/2023, Time: 1:04:39 PM
+Method: POST, Path: /api/products, Date: 11/22/2023, Time: 1:07:19 PM
+Method: POST, Path: /api/products, Date: 11/22/2023, Time: 1:13:02 PM
+Method: POST, Path: /api/products, Date: 11/22/2023, Time: 1:13:34 PM
+Method: POST, Path: /api/products, Date: 11/22/2023, Time: 1:15:22 PM
+Method: POST, Path: /api/products, Date: 11/22/2023, Time: 1:16:23 PM
+Method: POST, Path: /api/products, Date: 11/22/2023, Time: 1:18:04 PM
+Method: GET, Path: /api/products, Date: 11/22/2023, Time: 1:23:24 PM
+Method: GET, Path: /api/products, Date: 11/22/2023, Time: 1:43:55 PM
+Method: POST, Path: /api/products, Date: 11/22/2023, Time: 1:45:37 PM
+Method: POST, Path: /api/products, Date: 11/22/2023, Time: 1:45:47 PM
+Method: GET, Path: /api/categories, Date: 11/22/2023, Time: 1:55:38 PM
+Method: POST, Path: /api/categories, Date: 11/22/2023, Time: 1:56:24 PM
+Method: GET, Path: /api/categories, Date: 11/22/2023, Time: 1:56:35 PM
+Method: GET, Path: /api/categories/655dde58e389e41174119038, Date: 11/22/2023, Time: 1:56:52 PM

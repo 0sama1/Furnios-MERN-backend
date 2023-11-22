@@ -16,7 +16,7 @@ router.post('/', async (req, res, next) => {
   const { name, image, description, categories, variants, sizes, price, quantity } = req.body
 
   if (!name || !description || !price) {
-    next(ApiError.badRequest('Name, Description and Price are requried'))
+    next(ApiError.badRequest('Name, Description and Price are requried .'))
     return
   }
   const product = new Product({
