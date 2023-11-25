@@ -6,16 +6,26 @@ import Order from '../models/order'
 import ApiError from '../errors/ApiError'
 
 // get all products
-router.get('/', async (_, res) => {
-  const products = await Product.find()
-  // const categories = await Product.find().populate('products')
+
+router.get('/', async (req, res) => {
+  const page= Number(req.query.page) || 1
+  const perPage = Number(req.query.perPage) || 3
+  const products = await Product.find().skip((page - 1) * perPage).limit(perPage).populate('categories')
+  const totalItems= await Product.countDocuments()
+  const totalPages = Math.ceil(totalItems / perPage)
   console.log('products:', products)
-  res.json(products)
+  res.json({
+    totalItems,
+    totalPages,
+    perPage,
+    page,
+    products
+  })
 })
 // get single product by id
 router.get('/:productId', async (req, res, next) => {
   const productId = req.params.productId
-  const product = await Product.findById(productId)
+  const product = await Product.findById(productId).populate('categories')
   if(!product){
     next(ApiError.badRequest('Product not found!'))
   }
@@ -43,7 +53,7 @@ router.post('/', async (req, res, next) => {
   await product.save()
   res.json(product)
 })
-// Delete a product by its ID
+// Delete a product by its ID.
 router.delete('/:productId', async (req, res, next) => {
   const productId = req.params.productId
   const product =await Product.deleteOne({
@@ -56,21 +66,50 @@ router.delete('/:productId', async (req, res, next) => {
 
 })
 // update a product by its ID
-router.put('/:productId', async (req, res, next) =>{
-  const productId = req.params.productId
-  const newName = req.body.name
-  const newdescription = req.body.description
-  const newimage = req.body.image
-  const newprice = req.body.price
-  const newquantity = req.body.quantity
-  const newvariants = req.body.variants
-  const newsizes = req.body.sizes
-  const updatedProduct = await Product.updateOne({_id: productId}, {name: newName}, {description: newdescription})
-  res.json({
-    _id: productId,
-    name: newName,
-    description: newdescription,
-  })
-})
+router.put('/:productId', async (req, res, next) => {
+  const productId = req.params.productId;
+  const { name, description, image, price, quantity, categories, variants, sizes} = req.body;
+  try {
+    if (!name || !description || !price) {
+      next(ApiError.badRequest('Name, Description, and Price are required.'));
+      return;
+    }
+
+    const updateResult = await Product.updateOne({
+      _id: productId
+    }, {
+      $set: {
+        name,
+        description,
+        image,
+        categories,
+        price,
+        quantity,
+        variants,
+        sizes
+      }
+    });
+
+    if (updateResult.modifiedCount > 0) {
+      res.json({
+        _id: productId,
+        name,
+        description,
+        image,
+        categories,
+        price,
+        quantity,
+        variants,
+        sizes
+      });
+    } else {
+      next(ApiError.badRequest('No changes were made'))
+      return
+    }
+  } catch (error) {
+    next(ApiError.badRequest('Product not found'))
+    return
+  }
+});
 
 export default router
