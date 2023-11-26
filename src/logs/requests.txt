@@ -1,0 +1,8 @@
+Method: GET, Path: /api/products, Date: 26/11/2023, Time: 16:35:54
+Method: GET, Path: /api/products, Date: 26/11/2023, Time: 16:36:07
+Method: GET, Path: /api/products, Date: 26/11/2023, Time: 16:36:32
+Method: GET, Path: /api/products, Date: 26/11/2023, Time: 16:36:48
+Method: GET, Path: /api/products, Date: 26/11/2023, Time: 16:36:57
+Method: GET, Path: /api/products, Date: 26/11/2023, Time: 16:37:11
+Method: GET, Path: /api/products, Date: 26/11/2023, Time: 16:37:27
+Method: GET, Path: /api/products, Date: 26/11/2023, Time: 16:37:34
