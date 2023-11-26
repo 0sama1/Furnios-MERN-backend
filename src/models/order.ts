@@ -3,9 +3,6 @@ import mongoose, { Document } from 'mongoose'
 export type OrderDocument = Document & {
   name: string
   products: mongoose.Schema.Types.ObjectId[]
-  productId: number
-  userId: number
-  purchasedAt: Date
 }
 
 const orderSchema = new mongoose.Schema({
@@ -24,7 +21,8 @@ const orderSchema = new mongoose.Schema({
   },
 
   userId: {
-    type: Number,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
 
