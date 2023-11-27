@@ -1,77 +1,177 @@
 import express from 'express'
-
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import crypto from 'crypto'
+import 'dotenv/config'
 import ApiError from '../errors/ApiError'
 import User from '../models/user'
+import { validateUser } from '../middlewares/validateUser'
+import { generateActivationToken, sendActivationEmail } from '../util/email'
+import { checkAuth } from '../middlewares/checkAuth'
+import { DecodedUser } from '../types/types'
+import { checkRole } from '../middlewares/checkRole'
+
 const router = express.Router()
-
-router.param('userId', (req, res, next, userId) => {
-  const user = users.find((user) => user.id === userId)
-  if (!user) {
-    next(ApiError.badRequest('user id is required.'))
-    return
-  }
-  req.user = user
-  next()
-})
-
-router.delete('/:userId', (req, res) => {
-  const updatedUsers = users.filter((user) => user.id !== req.user.id)
-  res.json({ users: updatedUsers })
-})
-router.put('/:userId', (req, res) => {
-  const { first_name } = req.body
-
-  const updatedUsers = users.map((user) => {
-    if (user.id === req.user.id) {
-      return {
-        ...user,
-        first_name,
-      }
+console.log(crypto.randomBytes(64).toString('hex'))
+// get user by ID
+router.get('/:userId', async (req, res, next) => {
+  try {
+    const userId = req.params.userId
+    const user = await User.findById(userId).populate('order')
+    if (!user) {
+      next(ApiError.badRequest('User not found'))
+      return
     }
-    return user
-  })
-  res.json({ users: updatedUsers })
+    res.json(user)
+  } catch (error) {
+    next(ApiError.internal('Internal server error'))
+  }
 })
 
-router.post('/', (req, res, next) => {
-  const { id, first_name } = req.body
+router.get('/activateUser/:activationToken', async (req, res, next) => {
+  const activationToken = req.params.activationToken
+  const user = await User.findOne({ activationToken })
 
-  if (!id || !first_name) {
-    next(ApiError.badRequest('id and username are required'))
+  if (!user) {
+    next(ApiError.badRequest('Invalid activation token'))
     return
   }
-  const updatedUsers = [{ id, first_name }, ...users]
-  res.json({
-    msg: 'done',
-    users: updatedUsers,
+
+  user.isActive = true
+  user.activationToken = undefined
+
+  await user.save()
+
+  res.status(200).json({
+    msg: 'Account activated successfully',
   })
 })
 
-router.get('/:userId/page/:page', (req, res) => {
-  res.json({
-    msg: 'done',
-    user: req.user,
-  })
-})
-
-router.get('/', async (_, res) => {
+router.get('/', checkAuth('ADMIN'), async (req, res, next) => {
   const users = await User.find().populate('order')
   res.json({
     users,
   })
 })
 
-export default router
+router.put('/:userId', checkAuth('ADMIN'), async (req, res, next) => {
+  const userId = req.params.userId
+  const { firstName, lastName, avatar, role } = req.body
+  try {
+    const updatedUser = await User.updateOne(
+      {
+        _id: userId,
+      },
+      {
+        $set: {
+          firstName,
+          lastName,
+          avatar,
+          role,
+        },
+      }
+    )
+    if (updatedUser.modifiedCount > 0) {
+      res.json({
+        firstName,
+        lastName,
+        avatar,
+        role,
+        msg: 'user updated successfully',
+        updatedUser,
+      })
+    } else {
+      next(ApiError.badRequest('No changes were made'))
+      return
+    }
+  } catch (error) {
+    next(ApiError.badRequest('User not found'))
+    return
+  }
+})
+router.post('/register', validateUser, async (req, res, next) => {
+  const { email, password } = req.validatedUser
+  const { firstName, lastName, avatar, order } = req.body
 
-const users = [
-  { id: 'e539c0be-b51c-4462-8162-55cf584d9589', first_name: 'ksoutherton0' },
-  { id: '18db4fe3-a4b5-4720-af13-f98f00f22cc2', first_name: 'kmackowle1' },
-  { id: 'f03070b4-a084-4f94-b19e-40df0d6907c7', first_name: 'osmorthit2' },
-  { id: '6ac16842-a7ca-4942-b33d-6ec9407dac86', first_name: 'mlongland3' },
-  { id: '0d1491be-8415-4831-9566-742773751967', first_name: 'sgingles4' },
-  { id: 'fd4c2e80-4d14-48f9-8116-0a83617c45e3', first_name: 'msayward5' },
-  { id: '411cb4a0-63a2-48ec-924c-1008940b65b4', first_name: 'zedmons6' },
-  { id: '1e9a180e-2573-49ce-8a38-6692cb3948c2', first_name: 'kaymes7' },
-  { id: '1e1eaa42-d50d-48b3-a516-7df28e3eb605', first_name: 'jboyse8' },
-  { id: '9250cfcd-9789-418d-9826-2536d6d6ad39', first_name: 'jnockolds9' },
-]
+  try {
+    const userExists = await User.findOne({ email })
+    if (userExists) {
+      return next(ApiError.badRequest('Email already registered'))
+    }
+
+    const activationToken = generateActivationToken()
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    const newUser = new User({
+      firstName,
+      lastName,
+      avatar,
+      email,
+      order,
+      password: hashedPassword,
+      activationToken,
+    })
+    await newUser.save()
+
+    await sendActivationEmail(email, activationToken)
+
+    res.json({
+      msg: 'User registered. Check your email to activate your account!',
+      user: newUser,
+    })
+  } catch (error) {
+    console.log('error:', error)
+    next(ApiError.badRequest('Something went wrong'))
+  }
+})
+
+router.post('/login', validateUser, async (req, res, next) => {
+  const { email, password } = req.validatedUser
+  const user = await User.findOne({ email })
+
+  // we moved this check to be after comparing to avoid timing attack
+  if (!user || !user.isActive) {
+    next(ApiError.badRequest('Invalid email or account not activated'))
+    return
+  }
+  const isPassValid = await bcrypt.compare(password, user.password)
+
+  if (!isPassValid) {
+    next(ApiError.badRequest('Invalid email or password'))
+    return
+  }
+
+  const token = jwt.sign(
+    {
+      userId: user._id,
+      email: user.email,
+      role: user.role,
+    },
+    process.env.TOKEN_SECRET as string,
+    {
+      expiresIn: '24h',
+      algorithm: 'HS256',
+    }
+  )
+
+  res.status(200).json({ msg: 'Login successful', token })
+})
+router.delete('/:userId', checkAuth('ADMIN'), async (req, res, next) => {
+  try {
+    const userId = req.params.userId
+    const user = await User.findByIdAndDelete(userId).populate('order')
+    if (!user) {
+      next(ApiError.badRequest('User not found'))
+      return
+    }
+    res.json({
+      user,
+      msg: 'User deleted successfully',
+    })
+  } catch (error) {
+    next(ApiError.internal('internal server error'))
+    return
+  }
+})
+
+export default router
