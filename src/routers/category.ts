@@ -4,11 +4,41 @@ const router = express.Router()
 import Category from '../models/category'
 import ApiError from '../errors/ApiError'
 
-router.get('/', async (_, res) => {
-  const categories = await Category.find()
-  console.log('categories:', categories)
-  res.json(categories)
-})
+type Filter = {
+  name?: { $regex: RegExp };
+};
+
+type SortOptions = {
+  name?: 1 | -1;
+};
+
+router.get('/', async (req, res) => {
+  try {
+    const name = req.query.name;
+    const sort = req.query.sort;
+
+    const filters: Filter = {};
+    const sortOptions: SortOptions = {};
+
+    if (name && typeof name === 'string') {
+      filters.name = { $regex: new RegExp(name, 'i') };
+    }
+
+    if (sort && typeof sort === 'string') {
+      if (sort === 'asc' || sort === 'desc') {
+        sortOptions.name = sort === 'asc' ? 1 : -1;
+      }
+    }
+
+    const categories = await Category.find(filters).sort(sortOptions);
+    console.log('categories:', categories);
+    res.json(categories);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 router.get('/:categoyId', async (req, res) => {
   const categoyId = req.params.categoyId
   const categories = await Category.findById(categoyId)
@@ -16,7 +46,7 @@ router.get('/:categoyId', async (req, res) => {
 })
 
 router.post('/', async (req, res, next) => {
-  const { name} = req.body
+  const { name } = req.body
 
   if (!name) {
     next(ApiError.badRequest('Name are requried'))
@@ -30,7 +60,7 @@ router.post('/', async (req, res, next) => {
   res.json(category)
 })
 
-router.delete('/:categoryId', async (req, res) =>{
+router.delete('/:categoryId', async (req, res) => {
   const categoyId = req.params.categoryId
   const category = await Category.deleteOne({
     _id: categoyId,
@@ -38,18 +68,17 @@ router.delete('/:categoryId', async (req, res) =>{
   res.json({
     _id: categoyId,
     name: req.body.name,
-    msg: "Category deleted"
-
+    msg: 'Category deleted',
   })
 })
 
-router.put('/:categoryId', async (req, res) =>{
+router.put('/:categoryId', async (req, res) => {
   const newName = req.body.name
-  const categoryId= req.params.categoryId
-  const updatedCategory = await Category.updateOne({_id: categoryId}, {name: newName})
+  const categoryId = req.params.categoryId
+  const updatedCategory = await Category.updateOne({ _id: categoryId }, { name: newName })
   res.json({
     name: newName,
-    _id: categoryId
+    _id: categoryId,
   })
 })
 export default router
