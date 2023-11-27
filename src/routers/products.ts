@@ -4,7 +4,7 @@ const router = express.Router()
 import Product from '../models/product'
 import Order from '../models/order'
 import ApiError from '../errors/ApiError'
-import { Filter, SortOptions } from '../types/type'
+import { Filter, SortOptions } from '../types/types'
 
 // get all products
 
