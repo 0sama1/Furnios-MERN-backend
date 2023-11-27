@@ -21,12 +21,10 @@ function validateRole(role: string) {
 }
 const userSchema = new mongoose.Schema({
   firstName: {
-    type: String,
-    // required: true,
-  },
+    type: String,  },
   lastName: {
     type: String,
-    // required: true,
+
   },
   email: {
     type: String,

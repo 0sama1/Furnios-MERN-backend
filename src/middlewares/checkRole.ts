@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { Role } from '../types'
+import { Role } from '../types/types'
 import ApiError from '../errors/ApiError'
 
 // INFO: this middleware is now merged with checkAuth.

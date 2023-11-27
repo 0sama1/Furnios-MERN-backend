@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { NextFunction, Request, Response } from 'express'
 import ApiError from '../errors/ApiError'
-import { DecodedUser, Role } from '../types'
+import { DecodedUser, Role } from '../types/types'
 
 export function checkAuth(expectedRole: Role) {
   return (req: Request, res: Response, next: NextFunction) => {

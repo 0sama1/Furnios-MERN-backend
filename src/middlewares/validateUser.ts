@@ -5,8 +5,6 @@ import ApiError from '../errors/ApiError'
 
 export function validateUser(req: Request, res: Response, next: NextFunction) {
   const schema = zod.object({
-    // firstName: zod.string(),
-    // lastName: zod.string(),
     email: zod.string().email(),
     password: zod.string().min(6),
   })
