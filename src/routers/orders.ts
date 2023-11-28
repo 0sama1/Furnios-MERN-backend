@@ -4,7 +4,13 @@ const router = express.Router()
 
 import User from '../models/user'
 import ApiError from '../errors/ApiError'
-import { createOrder, deleteOrder, getAllOrders, getSingleOrder } from '../controllers/ordersController'
+import {
+  createOrder,
+  deleteOrder,
+  getAllOrders,
+  getSingleOrder,
+  updateOrder,
+} from '../controllers/ordersController'
 
 // CREATE: POST request to create a new order
 router.post('/', createOrder)
@@ -16,5 +22,7 @@ router.get('/', getAllOrders)
 router.get('/:orderId', getSingleOrder)
 
 router.delete('/:orderId', deleteOrder)
+
+router.put('/:orderId', updateOrder)
 
 export default router
