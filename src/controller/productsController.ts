@@ -84,14 +84,22 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
 
 export const deleteProduct = async (req: Request, res: Response, next: NextFunction) => {
   const productId = req.params.productId
-  const product =await Product.deleteOne({
-    _id: productId
-  })
-  res.json({
-    _id: productId,
-    name: req.body.name
-  })
-
+  try {
+    const product =await Product.deleteOne({
+      _id: productId
+    })
+    if (!product) {
+      next(ApiError.badRequest('Product not found'))
+      return
+    }
+    res.json({
+      product,
+      msg: 'Produt deleted successfully',
+    })
+  } catch (error) {
+    next(ApiError.internal('internal server error'))
+    return
+  }
 }
 
 export const updateProduct = async (req: Request, res: Response, next:NextFunction) => {

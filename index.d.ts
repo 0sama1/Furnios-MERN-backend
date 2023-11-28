@@ -4,6 +4,11 @@ declare namespace Express {
       email: string
       password: string
     }
+    validatedProduct: {
+      name: string
+      price: number
+      description: string
+    }
     decodedUser: {
       userId: string
       email: string
