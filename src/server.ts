@@ -5,7 +5,7 @@ import { config } from 'dotenv'
 import usersRouter from './routers/users'
 import productsRouter from './routers/products'
 import ordersRouter from './routers/orders'
-import categoryRouter from './routers/category'
+import categoryRouter from './routers/categories'
 import apiErrorHandler from './middlewares/errorHandler'
 
 import myLogger from './middlewares/logger'

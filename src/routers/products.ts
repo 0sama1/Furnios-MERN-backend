@@ -4,7 +4,7 @@ const router = express.Router()
 
 import Order from '../models/order'
 import ApiError from '../errors/ApiError'
-import { createProduct, deleteProduct, getAllProducts, getProduct, updateProduct } from '../controller/productsController'
+import { createProduct, deleteProduct, getAllProducts, getProduct, updateProduct } from '../controllers/productsController'
 import { checkAuth } from '../middlewares/checkAuth'
 import { validateProduct } from '../middlewares/validateProduct'
 

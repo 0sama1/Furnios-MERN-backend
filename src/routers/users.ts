@@ -3,7 +3,7 @@ import 'dotenv/config'
 
 import { validateUser } from '../middlewares/validateUser'
 import { checkAuth } from '../middlewares/checkAuth'
-import { activateAccount, createUser, deletrUser, getAllUsers, getSingleUser, login, updateUser } from '../controller/usersController'
+import { activateAccount, createUser, deletrUser, getAllUsers, getSingleUser, login, updateUser } from '../controllers/usersController'
 
 const router = express.Router()
 

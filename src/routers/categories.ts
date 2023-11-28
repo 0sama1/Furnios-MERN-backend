@@ -3,7 +3,7 @@ const router = express.Router()
 
 
 import ApiError from '../errors/ApiError'
-import { createCategory, deleteCategory, getAllCategories, getSingleCategory, updateCategory } from '../controller/categoriesController';
+import { createCategory, deleteCategory, getAllCategories, getSingleCategory, updateCategory } from '../controllers/categoriesController';
 import { checkAuth } from '../middlewares/checkAuth';
 
 router.get('/', checkAuth('ADMIN'), getAllCategories);

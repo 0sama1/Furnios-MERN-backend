@@ -4,7 +4,7 @@ const router = express.Router()
 
 import User from '../models/user'
 import ApiError from '../errors/ApiError'
-import { createOrder, deleteOrder, getAllOrders, getSingleOrder } from '../controller/ordersController'
+import { createOrder, deleteOrder, getAllOrders, getSingleOrder } from '../controllers/ordersController'
 
 // CREATE: POST request to create a new order
 router.post('/', createOrder)
