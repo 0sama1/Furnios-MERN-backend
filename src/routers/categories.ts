@@ -6,9 +6,9 @@ import ApiError from '../errors/ApiError'
 import { createCategory, deleteCategory, getAllCategories, getSingleCategory, updateCategory } from '../controllers/categoriesController';
 import { checkAuth } from '../middlewares/checkAuth';
 
-router.get('/', checkAuth('ADMIN'), getAllCategories);
+router.get('/', getAllCategories);
 
-router.get('/:categoyId', checkAuth('ADMIN'), getSingleCategory)
+router.get('/:categoyId', getSingleCategory)
 
 router.post('/', checkAuth('ADMIN'), createCategory)
 

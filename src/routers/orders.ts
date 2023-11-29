@@ -14,7 +14,7 @@ import {
 import { checkAuth } from '../middlewares/checkAuth'
 
 // CREATE: POST request to create a new order
-router.post('/', createOrder)
+router.post('/', checkAuth('ADMIN'), createOrder)
 
 // READ: GET request to fetch all orders
 router.get('/', checkAuth('ADMIN'), getAllOrders)

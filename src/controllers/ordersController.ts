@@ -40,7 +40,7 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
 
 export const getAllOrders = async (req: Request, res: Response) => {
   try {
-    const orders = await Order.find().populate('productId').populate('userId')
+    const orders = await Order.find().populate('productsId').populate('userId')
     res.status(200).json(orders)
   } catch (error) {
     console.error(error)
@@ -51,7 +51,7 @@ export const getAllOrders = async (req: Request, res: Response) => {
 export const getSingleOrder = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.orderId
-    const order = await Order.findById(orderId).populate('productId').populate('userId')
+    const order = await Order.findById(orderId).populate('productsId').populate('userId')
     if (!order) {
       return res.status(404).json({ error: 'Id Order cannot be found! try again.' })
     }

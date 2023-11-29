@@ -15,11 +15,11 @@ router.get('/:userId', getSingleUser)
 
 router.get('/activateUser/:activationToken', activateAccount)
 
-router.put('/:userId', updateUser)
-
 router.post('/register', validateUser, createUser)
 
 router.post('/login', validateUser, login)
+
+router.put('/profile/:userId', updateUser)
 
 router.delete('/:userId', checkAuth('ADMIN'), deleteUser)
 

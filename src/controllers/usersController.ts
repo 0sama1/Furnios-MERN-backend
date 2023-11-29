@@ -10,7 +10,7 @@ import User from '../models/user'
 
 
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
-    const users = await User.find({},{password:0}).populate('order')
+    const users = await User.find({},{password:0})
     res.json({
       users,
     })
@@ -19,7 +19,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 export const getSingleUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId
-      const user = await User.findById(userId).populate('order')
+      const user = await User.findById(userId, {password:0})
       if (!user) {
         next(ApiError.badRequest('User not found'))
         return
