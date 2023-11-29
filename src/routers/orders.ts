@@ -11,18 +11,19 @@ import {
   getSingleOrder,
   updateOrder,
 } from '../controllers/ordersController'
+import { checkAuth } from '../middlewares/checkAuth'
 
 // CREATE: POST request to create a new order
 router.post('/', createOrder)
 
 // READ: GET request to fetch all orders
-router.get('/', getAllOrders)
+router.get('/', checkAuth('ADMIN'), getAllOrders)
 
 //Get By ID
 router.get('/:orderId', getSingleOrder)
 
-router.delete('/:orderId', deleteOrder)
+router.delete('/:orderId', checkAuth('ADMIN'), deleteOrder)
 
-router.put('/:orderId', updateOrder)
+router.put('/:orderId', checkAuth('ADMIN'), updateOrder)
 
 export default router

@@ -10,7 +10,7 @@ import User from '../models/user'
 
 
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
-    const users = await User.find().populate('order')
+    const users = await User.find({},{password:0}).populate('order')
     res.json({
       users,
     })
@@ -153,7 +153,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     res.status(200).json({ msg: 'Login successful', token })
 }
 
-export const deletrUser = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId
       const user = await User.findByIdAndDelete(userId).populate('order')

@@ -1,26 +1,36 @@
 import { NextFunction, Request, Response } from 'express'
 
 import Order from '../models/order'
+import User from '../models/user'
+import Product from '../models/product'
 
-export const createOrder = async (req: Request, res: Response) => {
+import ApiError from '../errors/ApiError'
+
+export const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { productId, userId, purchasedAt } = req.body
+    const { productsId, userId, purchasedAt } = req.body
 
     // Validate required fields
-    if (!productId || !userId) {
+    if (!productsId || !userId) {
       return res.status(400).json({ message: 'All fields are required' })
     }
 
     // Create a new order
     const newOrder = new Order({
-      productId,
+      productsId,
       userId,
       purchasedAt,
     })
 
-    // Save the order to the database
-    const savedOrder = await newOrder.save()
+    const user= await User.findByIdAndUpdate(userId, { $push: { order: newOrder } },{new: true}).exec()
+    const product = await Product.findById(productsId)
 
+    // Save the order to the database
+    if(!user || !product){
+      next(ApiError.badRequest('User not found or a product'))
+      return
+    }
+    const savedOrder = await newOrder.save()
     res.status(201).json(savedOrder)
   } catch (error) {
     console.error(error)

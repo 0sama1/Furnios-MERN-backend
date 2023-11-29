@@ -6,7 +6,7 @@ export type OrderDocument = Document & {
 }
 
 const orderSchema = new mongoose.Schema({
-  productId: {
+  productsId: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Product',
     required: true,

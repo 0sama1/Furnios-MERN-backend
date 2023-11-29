@@ -3,7 +3,7 @@ import 'dotenv/config'
 
 import { validateUser } from '../middlewares/validateUser'
 import { checkAuth } from '../middlewares/checkAuth'
-import { activateAccount, createUser, deletrUser, getAllUsers, getSingleUser, login, updateUser } from '../controllers/usersController'
+import { activateAccount, createUser, deleteUser, getAllUsers, getSingleUser, login, updateUser } from '../controllers/usersController'
 
 const router = express.Router()
 
@@ -11,16 +11,16 @@ const router = express.Router()
 router.get('/', checkAuth('ADMIN'), getAllUsers)
 
 // get user by ID
-router.get('/:userId', checkAuth('ADMIN'), getSingleUser)
+router.get('/:userId', getSingleUser)
 
 router.get('/activateUser/:activationToken', activateAccount)
 
-router.put('/:userId', checkAuth('ADMIN'), updateUser)
+router.put('/:userId', updateUser)
 
 router.post('/register', validateUser, createUser)
 
 router.post('/login', validateUser, login)
 
-router.delete('/:userId', checkAuth('ADMIN'), deletrUser)
+router.delete('/:userId', checkAuth('ADMIN'), deleteUser)
 
 export default router
