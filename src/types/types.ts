@@ -1,3 +1,5 @@
+import { SortOrder } from "mongoose"
+
 export type DecodedUser = {
   userId: string
   email: string
@@ -13,5 +15,5 @@ export type Filter ={
   name?:{ $regex: RegExp },
 }
 export type SortOptions = {
-  sort?: 'asc' | 'desc' | { name: number };
+  sort?: 'asc' | 'desc' | { name: SortOrder };
 }
