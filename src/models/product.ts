@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-export type ProuctDocument = Document & {
+export type ProductDocument = Document & {
   name: string
   image: string
   description: string
@@ -43,4 +43,4 @@ const productSchema = new mongoose.Schema({
   },
 })
 
-export default mongoose.model<ProuctDocument>('Product', productSchema)
+export default mongoose.model<ProductDocument>('Product', productSchema)
