@@ -15,7 +15,11 @@ const app = express()
 const PORT = 5050
 const URL = process.env.ATLAS_URL as string
 
-app.use(myLogger)
+// if (process.env.NODE_ENV === "development") {
+  app.use(myLogger)
+// }
+
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
